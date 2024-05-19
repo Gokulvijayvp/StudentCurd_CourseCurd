@@ -6,7 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 const CourseEditForm = () => {
   const {courseData, setOpenUp, courseId,courseSchema, handleUpdateCourse} = UseStudentContext()
-  const { register, handleSubmit, formState: { errors },} = useForm({resolver: yupResolver(courseSchema),});
+  const { register, handleSubmit, formState: { errors },} = useForm({resolver: yupResolver(courseSchema)});
   const id = courseId
   const usersData = courseData.find((course) => course._id.toString() === id)
 
