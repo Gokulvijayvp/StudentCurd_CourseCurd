@@ -1,7 +1,6 @@
 import { useEffect, useState, createContext, useContext } from "react";
 import axios from "axios";
 import * as Yup from "yup";
-
 import { useLocation } from "react-router-dom";
 
 const studentContext = createContext("");
@@ -13,21 +12,40 @@ export function UseStudentContext() {
 export default function StudentProvider({ children }) {
   const [studentData, setStudentData] = useState([]);
   const [courseData, setCourseData] = useState([]);
+  
   const [coursesList, setCoursesList] = useState([]);
+  
   const [openAdd, setOpenAdd] = useState(false);
   const [openUp, setOpenUp] = useState(false);
+  
   const [openStdUp, setOpenStdUp] = useState(false);
   const [openStdNw, setOpenStdNw] = useState(false);
+  
   const [dataMessage, setDataMessage] = useState({})
+  
   const [stdSearchitem,setStdSearchitem] = useState('')
   const [stdSearch, setStdSearch ] = useState([])
+  
   const [courseSearchitem,setCourseSearchitem] = useState('')
   const [courseSearch, setCourseSearch ] = useState([])
+  
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [seletedName, setSeletedName] = useState('') 
+  
   const [showCourseConfirmation, setShowCourseConfirmation] = useState(false)
   const [seletedCourseName, setSeletedCourseName] = useState('')
+  
+  const [courseId, setCourseId] = useState(null);
+  const [studentId, setStudentId] = useState(null);
 
+  const [currentTab, setCurrentTab] = useState("students");
+  
+  const { pathname } = useLocation();
+
+  const client = axios.create({
+    baseURL: "http://localhost:8080",
+  });
+  
   useEffect(() =>{
     const filterResult = studentData.filter(std => 
         ((std.name).toLowerCase()).includes(stdSearchitem.toLowerCase())
@@ -41,14 +59,8 @@ export default function StudentProvider({ children }) {
     )
     setCourseSearch(filterResult.reverse())
   },[courseData,courseSearchitem])
-
-  const [course, setCourse] = useState({
-    name: "",
-    email: "",
-    course: "",
-    date: "",
-  });
-  const [courseId, setCourseId] = useState(null);
+  
+  
   const [student, setStudent] = useState({
     name: "",
     email: "",
@@ -60,14 +72,9 @@ export default function StudentProvider({ children }) {
     pincode: "",
     status :"",
   });
-  const [studentId, setStudentId] = useState(null);
-  const { pathname } = useLocation();
+  
 
-  const client = axios.create({
-    baseURL: "http://localhost:8080",
-  });
-
-  const [currentTab, setCurrentTab] = useState("students");
+  
   const handleSelect = (eventKey) => {
     setCurrentTab(eventKey);
   };
@@ -148,28 +155,21 @@ export default function StudentProvider({ children }) {
       }else{
           setDataMessage({coursetaken: response.data})
       }
-
       
     } catch (error) {
       console.error("Error creating new user:", error);
     }
   };
 
-  const handleUpdateCourse = async (id) => {
+  const handleUpdateCourse = async (id,data) => {
     try {
-      const datas = {
-        name: course.name,
-        email: course.email,
-        course: course.course,
-        date: course.date,
-      };
-      const response = await client.put(`/api/updatecourse/${id}`, datas);
+      const response = await client.put(`/api/updatecourse/${id}`, data);
       setCourseData(
         courseData.map((course) =>
           course._id === id ? { ...response.data } : course
         )
       );
-      setOpenStdNw(false);
+      setOpenUp(false);
     } catch (error) {
       console.log(error);
     }
@@ -287,8 +287,6 @@ const handleCourseDeleteClick = () => {
         currentTab,
         changeStatus,
         openUp,
-        setCourse,
-        course,
         courseId,
         clickCourseEdit,
         handleUpdateCourse,
