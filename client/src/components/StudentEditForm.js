@@ -10,12 +10,16 @@ const StudentEditForm = () => {
     setOpenStdUp,
     studentId,
     coursesList,
+    studentSchema,
     handleUpdateStudent,
   } = UseStudentContext();
-  const id = studentId;
-  const usersData = studentData.find((course) => course._id.toString() === id);
+
+  const { register, handleSubmit, formState: { errors },} = useForm({resolver: yupResolver(studentSchema)});
   
   const [selectedStatus, setSelectedStatus] = useState("");
+
+  const id = studentId;
+  const usersData = studentData.find((course) => course._id.toString() === id);
   
   useEffect(()=>{
     if(usersData){
