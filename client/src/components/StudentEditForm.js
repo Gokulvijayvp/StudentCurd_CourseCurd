@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { UseStudentContext } from "../mycontext/context";
 import { RiCloseFill } from "react-icons/ri";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 const StudentEditForm = () => {
   const {
