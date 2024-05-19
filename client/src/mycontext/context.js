@@ -60,21 +60,6 @@ export default function StudentProvider({ children }) {
     setCourseSearch(filterResult.reverse())
   },[courseData,courseSearchitem])
   
-  
-  const [student, setStudent] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    gender: "",
-    dob: "",
-    address: "",
-    state: "",
-    pincode: "",
-    status :"",
-  });
-  
-
-  
   const handleSelect = (eventKey) => {
     setCurrentTab(eventKey);
   };
@@ -175,21 +160,9 @@ export default function StudentProvider({ children }) {
     }
   };
 
-  const handleUpdateStudent = async (id) => {
+  const handleUpdateStudent = async (id,data) => {
     try {
-      const datas = {
-        name: student.name,
-        email: student.email,
-        phone: student.phone,
-        gender: student.gender,
-        dob: student.dob,
-        address: student.address,
-        state: student.state,
-        pincode: student.pincode,
-        course:student.course,
-        status :student.status
-      };
-      const response = await client.put(`/api/updatestudent/${id}`, datas);
+      const response = await client.put(`/api/updatestudent/${id}`, data);
       setStudentData(
         studentData.map((std) => (std._id === id ? { ...response.data } : std))
       );
@@ -219,8 +192,6 @@ export default function StudentProvider({ children }) {
       console.log(error);
     }
   };
-
-  
 
   const handleStudentDelete = async (id) => {
     try {
@@ -255,8 +226,6 @@ const handleCourseDeleteClick = () => {
   return (
     <studentContext.Provider
       value={{
-        student,
-        setStudent,
         openStdNw,
         setOpenStdNw,
         openAdd,
